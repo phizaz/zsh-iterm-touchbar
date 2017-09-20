@@ -84,6 +84,7 @@ pecho() {
 fnKeys=('^[OP' '^[OQ' '^[OR' '^[OS' '^[[15~' '^[[17~' '^[[18~' '^[[19~' '^[[20~' '^[[21~' '^[[23~' '^[[24~')
 touchBarState=''
 npmScripts=()
+yarnScripts=()
 lastPackageJsonPath=''
 
 function _clearTouchbar() {
@@ -139,16 +140,39 @@ function _displayDefault() {
     bindkey -s '^[OS' "git push origin $(git_current_branch) \n"
   fi
 
+  pecho "\033]1337;SetKeyLabel=F5=🤖 react-devtools\a"
+  bindkey -s "${fnKeys[8]}" 'react-devtools \n'
+
   # PACKAGE.JSON
   # ------------
   if [[ -f package.json ]]; then
-    pecho "\033]1337;SetKeyLabel=F5=⚡️ npm-run\a"
-    bindkey "${fnKeys[5]}" _displayNpmScripts
+    pecho "\033]1337;SetKeyLabel=F6=⚡️ npm-run\a"
+    bindkey "${fnKeys[7]}" _displayNpmScripts
   fi
+
+  # Yarn
+  if [[ -f yarn.lock ]]; then
+    pecho "\033]1337;SetKeyLabel=F7=⚙️ yarn install\a"
+    bindkey -s "${fnKeys[5]}" 'yarn install \n'
+    pecho "\033]1337;SetKeyLabel=F8=🏗 yarn add\a"
+    bindkey -s "${fnKeys[6]}" 'yarn add '
+  fi
+
+  if [[ -f Gemfile ]]; then
+    pecho "\033]1337;SetKeyLabel=F9=💎 start rails server\a"
+    bindkey -s "${fnKeys[9]}" 'bundle exec rails s \n'
+    pecho "\033]1337;SetKeyLabel=F10=📃 run specs\a"
+    bindkey -s "${fnKeys[10]}" 'bundle exec rspec spec \n'
+    pecho "\033]1337;SetKeyLabel=F11=👾 webpacker dev server\a"
+    bindkey -s "${fnKeys[11]}" 'bin/webpack-dev-server \n'
+  fi
+
+
+
 }
 
 function _displayNpmScripts() {
-  # find available npm run scripts only if new directory
+  # find available npm scripts only if new directory
   if [[ $lastPackageJsonPath != $(echo "$(pwd)/package.json") ]]; then
     lastPackageJsonPath=$(echo "$(pwd)/package.json")
     npmScripts=($(node -e "console.log(Object.keys($(npm run --json)).filter(name => !name.includes(':')).sort((a, b) => a.localeCompare(b)).filter((name, idx) => idx < 12).join(' '))"))
@@ -183,4 +207,3 @@ precmd_iterm_touchbar() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd precmd_iterm_touchbar
-
