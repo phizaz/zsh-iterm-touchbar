@@ -141,21 +141,21 @@ function _displayDefault() {
   fi
 
   pecho "\033]1337;SetKeyLabel=F5=🤖 react-devtools\a"
-  bindkey -s "${fnKeys[8]}" 'react-devtools \n'
+  bindkey -s "${fnKeys[5]}" 'react-devtools \n'
 
   # PACKAGE.JSON
   # ------------
   if [[ -f package.json ]]; then
     pecho "\033]1337;SetKeyLabel=F6=⚡️ npm-run\a"
-    bindkey "${fnKeys[7]}" _displayNpmScripts
+    bindkey "${fnKeys[6]}" _displayNpmScripts
   fi
 
   # Yarn
   if [[ -f yarn.lock ]]; then
     pecho "\033]1337;SetKeyLabel=F7=⚙️ yarn install\a"
-    bindkey -s "${fnKeys[5]}" 'yarn install \n'
+    bindkey -s "${fnKeys[7]}" 'yarn install \n'
     pecho "\033]1337;SetKeyLabel=F8=🏗 yarn add\a"
-    bindkey -s "${fnKeys[6]}" 'yarn add '
+    bindkey -s "${fnKeys[8]}" 'yarn add '
   fi
 
   if [[ -f Gemfile ]]; then
